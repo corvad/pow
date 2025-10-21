@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "verifier_lib",
+    srcs = ["server.go"],
+    importpath = "github.com/corvad/pow/services/verifier",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//api/proto:verifier_go_proto",
+        "//pkg/pow",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//reflection",
+    ],
+)
+
+go_binary(
+    name = "verifier",
+    embed = [":verifier_lib"],
+    visibility = ["//visibility:public"],
+)

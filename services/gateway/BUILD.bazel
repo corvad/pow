@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "gateway_lib",
+    srcs = ["server.go"],
+    importpath = "github.com/corvad/pow/services/gateway",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//api/proto:challenge_go_proto",
+        "//api/proto:verifier_go_proto",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//credentials/insecure",
+    ],
+)
+
+go_binary(
+    name = "gateway",
+    embed = [":gateway_lib"],
+    visibility = ["//visibility:public"],
+)

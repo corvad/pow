@@ -1,0 +1,18 @@
+# Common build options
+build --incompatible_enable_cc_toolchain_resolution
+build --cxxopt=-std=c++17
+build --host_cxxopt=-std=c++17
+
+# Go specific options
+build --experimental_proto_descriptor_sets_include_source_info
+
+# Performance options
+build --jobs=auto
+build --local_cpu_resources=HOST_CPUS-1
+
+# Output options
+build --color=yes
+build --show_timestamps
+
+# Test options
+test --test_output=errors
