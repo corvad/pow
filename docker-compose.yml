@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  challenge:
+    build:
+      context: .
+      dockerfile: services/challenge/Dockerfile
+    ports:
+      - "50051:50051"
+    networks:
+      - pow-network
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  verifier:
+    build:
+      context: .
+      dockerfile: services/verifier/Dockerfile
+    ports:
+      - "50052:50052"
+    networks:
+      - pow-network
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=:50052"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  gateway:
+    build:
+      context: .
+      dockerfile: services/gateway/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - CHALLENGE_ADDR=challenge:50051
+      - VERIFIER_ADDR=verifier:50052
+    depends_on:
+      - challenge
+      - verifier
+    networks:
+      - pow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  pow-network:
+    driver: bridge

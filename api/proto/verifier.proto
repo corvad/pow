@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package pow.verifier.v1;
+
+option go_package = "github.com/corvad/pow/api/proto/verifier/v1;verifierv1";
+
+import "google/api/annotations.proto";
+
+// VerifierService verifies proof-of-work solutions
+service VerifierService {
+  // VerifyProof verifies a proof-of-work solution
+  rpc VerifyProof(VerifyProofRequest) returns (VerifyProofResponse) {
+    option (google.api.http) = {
+      post: "/v1/verify"
+      body: "*"
+    };
+  }
+}
+
+// VerifyProofRequest contains the proof to verify
+message VerifyProofRequest {
+  // challenge_id is the ID of the challenge being solved
+  string challenge_id = 1;
+  // nonce is the proof-of-work nonce
+  int64 nonce = 2;
+  // data is the original challenge data
+  string data = 3;
+  // difficulty is the required difficulty level
+  int32 difficulty = 4;
+}
+
+// VerifyProofResponse contains the verification result
+message VerifyProofResponse {
+  // valid indicates if the proof is valid
+  bool valid = 1;
+  // hash is the computed hash
+  string hash = 2;
+  // message provides additional information
+  string message = 3;
+}

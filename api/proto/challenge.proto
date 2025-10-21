@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package pow.challenge.v1;
+
+option go_package = "github.com/corvad/pow/api/proto/challenge/v1;challengev1";
+
+import "google/api/annotations.proto";
+
+// ChallengeService provides proof-of-work challenge generation
+service ChallengeService {
+  // GetChallenge generates a new proof-of-work challenge
+  rpc GetChallenge(GetChallengeRequest) returns (GetChallengeResponse) {
+    option (google.api.http) = {
+      post: "/v1/challenge"
+      body: "*"
+    };
+  }
+}
+
+// GetChallengeRequest requests a new proof-of-work challenge
+message GetChallengeRequest {
+  // difficulty is the number of leading zeros required in the hash
+  int32 difficulty = 1;
+  // data is optional data to include in the challenge
+  string data = 2;
+}
+
+// GetChallengeResponse contains the challenge details
+message GetChallengeResponse {
+  // challenge_id is a unique identifier for this challenge
+  string challenge_id = 1;
+  // difficulty is the number of leading zeros required
+  int32 difficulty = 2;
+  // data is the data that must be included in the proof
+  string data = 3;
+  // timestamp when the challenge was created
+  int64 timestamp = 4;
+}

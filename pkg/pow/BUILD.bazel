@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "pow",
+    srcs = ["pow.go"],
+    importpath = "github.com/corvad/pow/pkg/pow",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "pow_test",
+    srcs = ["pow_test.go"],
+    embed = [":pow"],
+)
